@@ -6,7 +6,12 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+/* import * as Sentry from "@sentry/browser"; */
 
+/* Sentry.init({
+  dsn:
+    "https://a03e3403d084419abc5454d13205ebd7@o374881.ingest.sentry.io/5193560",
+}); */
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>

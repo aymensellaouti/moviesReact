@@ -1,6 +1,6 @@
 import React from "react";
-import Like from "../common/like.component";
-import Table from "../common/table.component";
+import Like from "../../common/like.component";
+import Table from "../../common/table.component";
 import { Link } from "react-router-dom";
 
 const MoviesTable = ({ movies, onLike, onDelete, onSort, sortField }) => {
