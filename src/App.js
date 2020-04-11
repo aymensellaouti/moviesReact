@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Movies from "./components/movies/movies.components";
 import { Route, Switch, Redirect } from "react-router-dom";
-import http from "./services/httpService";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import Navbar from "./components/navbar";
@@ -11,18 +10,19 @@ import LoginForm from "./components/loginForm";
 import Register from "./components/register";
 import MovieForm from "./components/movies/movie-form";
 import { ToastContainer } from "react-toastify";
-import config from "./config.json";
+
 import "react-toastify/dist/ReactToastify.css";
 function App() {
   useEffect(() => {
-/*     const fetchData = async () => {
+    /*     const fetchData = async () => {
       const result = await http.get(config.apiEndpoint);
       console.log(result.data);
       handlePost();
     };
     fetchData();
- */  }, []);
-/*   const handlePost = async () => {
+ */
+  }, []);
+  /*   const handlePost = async () => {
     const result = await http.post(config.apiEndpoint, { a: "1", b: "2" });
     console.log(result.data);
   }; */

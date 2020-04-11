@@ -9,17 +9,29 @@ import {
   handlePropertyFormChange,
   renderSubmitButton,
 } from "../utils/formUtils";
-const LoginForm = () => {
-  const [account, setAccount] = useState({ username: "", password: "" });
+import { login } from "../services/authService";
+import { toast } from "react-toastify";
+const LoginForm = ({ history }) => {
+  const [account, setAccount] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     //Validation
     const formErrors = validate();
 
     setErrors(formErrors || {});
     if (!_.isEmpty(errors)) return;
-    //handle processing
+    try {
+      const { data: jwt } = await login(account);
+      localStorage.setItem("token", jwt);
+      return history.push("/movies");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const newErrors = { email: error.response.data };
+        setErrors(newErrors);
+        toast.error(error.response.data);
+      }
+    }
   };
   /*   const [fields, handleFieldChange] = useFormFields({
     username: "",
@@ -31,7 +43,7 @@ const LoginForm = () => {
   instead use autoFocus 
   */
   const schemaObject = {
-    username: Joi.string().required(),
+    email: Joi.string().required(),
     password: Joi.string().required(),
   };
   const schema = Joi.object(schemaObject);
@@ -61,12 +73,12 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <Input
-          identifiar="username"
-          label="Username"
-          value={account.username}
+          identifiar="email"
+          label="Email"
+          value={account.email}
           onChange={handleChange}
           type="text"
-          error={errors.username}
+          error={errors.email}
         ></Input>
       </div>
       <div className="form-group">

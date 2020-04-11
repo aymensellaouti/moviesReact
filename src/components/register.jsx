@@ -8,35 +8,45 @@ import {
   validateFormProperty,
   renderSubmitButton,
 } from "../utils/formUtils";
+import { register } from "./../services/userService";
 import Joi from "@hapi/joi";
 
 const Register = () => {
   const [account, setAccount] = useState({
-    username: "",
+    email: "",
     password: "",
     name: "",
   });
   const [errors, setErrors] = useState({});
   const schemaObject = {
-    username: Joi.string()
+    email: Joi.string()
       .email({ tlds: { allow: false } })
       .required(),
     password: Joi.string().min(5).required(),
     name: Joi.string().allow(""),
   };
   const schema = Joi.object(schemaObject);
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     //Validation
     const formErrors = validate();
 
     setErrors(formErrors || {});
     if (!_.isEmpty(errors)) return;
-    //handle processing
+    try {
+      await register(account);
+      //aymen@as.as
+    } catch (error) {
+      console.log("erreur", error.response.data);
+      if (error.response && error.response.status === 400) {
+        const newErrors = { ...errors };
+        newErrors.email = error.response.data;
+        setErrors(newErrors);
+      }
+    }
   };
   const validate = () => {
     const errors = validateFormWithJoi(schema, account);
-    console.log(errors);
     return errors;
   };
   const validateProperty = ({ name, value }) => {
@@ -55,12 +65,12 @@ const Register = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        identifiar="username"
-        label="Username"
-        value={account.username}
+        identifiar="email"
+        label="Email"
+        value={account.email}
         onChange={handleChange}
         type="text"
-        error={errors.username}
+        error={errors.email}
       ></Input>
       <Input
         identifiar="password"
