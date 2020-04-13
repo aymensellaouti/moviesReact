@@ -29,15 +29,12 @@ export const handlePropertyFormChange = (
   errors,
   setErrors
 ) => {
-  console.log(input.name, input.value);
   setData({
     ...data,
     [input.name]: input.value,
   });
-  console.log(data);
   const formErrors = { ...errors };
   const errorMessage = validateProperty(input);
-  console.log(errorMessage);
   if (errorMessage) formErrors[input.name] = errorMessage;
   else delete formErrors[input.name];
   setErrors(formErrors);

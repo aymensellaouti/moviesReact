@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import _ from "lodash";
 import MoviesTable from "./movies-table";
 import { toast } from "react-toastify";
+import authService from "../../services/authService";
 const Movies = ({ history }) => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
@@ -117,12 +118,15 @@ const Movies = ({ history }) => {
           ></Filter>
         </div>
         <div className="col">
-          <button
-            onClick={handleAddMovieButtonClick}
-            className="btn btn-primary"
-          >
-            New Movie
-          </button>
+          {authService.getCurrentUser() &&
+            authService.getCurrentUser().isAdmin && (
+              <button
+                onClick={handleAddMovieButtonClick}
+                className="btn btn-primary"
+              >
+                New Movie
+              </button>
+            )}
           <p>Showing {moviesCount} movies in the database.</p>
           <input
             type="text"

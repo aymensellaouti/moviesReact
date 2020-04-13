@@ -11,7 +11,7 @@ import {
 } from "../utils/formUtils";
 import { login } from "../services/authService";
 import { toast } from "react-toastify";
-const LoginForm = ({ history }) => {
+const LoginForm = ({ location }) => {
   const [account, setAccount] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const handleSubmit = async (event) => {
@@ -22,9 +22,10 @@ const LoginForm = ({ history }) => {
     setErrors(formErrors || {});
     if (!_.isEmpty(errors)) return;
     try {
-      const { data: jwt } = await login(account);
-      localStorage.setItem("token", jwt);
-      return history.push("/movies");
+      await login(account);
+      /* return history.push("/movies"); */
+      const path = location.state ? location.state.from.pathname : "/";
+      window.location = path;
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const newErrors = { email: error.response.data };
@@ -49,7 +50,6 @@ const LoginForm = ({ history }) => {
   const schema = Joi.object(schemaObject);
   const validate = () => {
     const errors = validateFormWithJoi(schema, account);
-    console.log(errors);
     return errors;
   };
   const validateProperty = ({ name, value }) => {

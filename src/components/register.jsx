@@ -1,7 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import Input from "../common/input";
 import _ from "lodash";
+import Joi from "@hapi/joi";
+
+import Input from "../common/input";
 import {
   handlePropertyFormChange,
   validateFormWithJoi,
@@ -9,9 +11,9 @@ import {
   renderSubmitButton,
 } from "../utils/formUtils";
 import { register } from "./../services/userService";
-import Joi from "@hapi/joi";
+import { loginWithJwt } from "../services/authService";
 
-const Register = () => {
+const Register = ({ history }) => {
   const [account, setAccount] = useState({
     email: "",
     password: "",
@@ -34,10 +36,11 @@ const Register = () => {
     setErrors(formErrors || {});
     if (!_.isEmpty(errors)) return;
     try {
-      await register(account);
-      //aymen@as.as
+      const response = await register(account);
+      loginWithJwt(response.headers["x-auth-token"]);
+      /* history.push("/"); */
+      window.location = "/";
     } catch (error) {
-      console.log("erreur", error.response.data);
       if (error.response && error.response.status === 400) {
         const newErrors = { ...errors };
         newErrors.email = error.response.data;

@@ -1,5 +1,9 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+
+export function setJwt(jwt) {
+  axios.defaults.headers.common["x-auth-token"] = jwt;
+}
 axios.interceptors.response.use(null, (error) => {
   console.log("error intercepted", error.response.body);
   const expectedErrors =
@@ -18,4 +22,5 @@ export default {
   post: axios.post,
   delete: axios.delete,
   put: axios.put,
+  setJwt
 };

@@ -2,6 +2,7 @@ import React from "react";
 import Like from "../../common/like.component";
 import Table from "../../common/table.component";
 import { Link } from "react-router-dom";
+import authService from "../../services/authService";
 
 const MoviesTable = ({ movies, onLike, onDelete, onSort, sortField }) => {
   /*   const [state, setstate] = useState(initialState); */
@@ -14,9 +15,12 @@ const MoviesTable = ({ movies, onLike, onDelete, onSort, sortField }) => {
   }
   function getDeleteButton(item) {
     return (
-      <button onClick={() => onDelete(item._id)} className="btn btn-danger">
-        Delete
-      </button>
+      authService.getCurrentUser() &&
+      authService.getCurrentUser().isAdmin && (
+        <button onClick={() => onDelete(item._id)} className="btn btn-danger">
+          Delete
+        </button>
+      )
     );
   }
   const columns = [
